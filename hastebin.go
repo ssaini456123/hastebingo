@@ -18,10 +18,6 @@ type Hastebin struct {
 	//
 	// It is usually found at the end of the url once
 	// a haste is created.
-	//
-	// I recommend you only fill this field in when you want
-	// to get information from a specific haste instead of
-	// creating a haste.
 	Key string
 
 	// Data is the contents of the haste.
