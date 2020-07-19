@@ -2,11 +2,11 @@ package hastebingo
 
 import (
 	"bytes"
-	"io/ioutil"
+	"encoding/json"
 	"net/http"
 )
 
-var base = "https://hastebin.com/"
+var base = "https://hastebin.com/documents"
 
 // Hastebin holds the basic structure of
 // hastebin hastes
@@ -14,35 +14,36 @@ var base = "https://hastebin.com/"
 // Please note however that this is based on my observations
 // from the element inspector in my browser.
 type Hastebin struct {
-	// Key is the key generated for the haste.
+	// Key is the unique key generated for each haste.
 	//
-	// It is usually found at the end of the url once
-	// a haste is created.
-	Key string
+	// This unique key is usually found at the end of
+	// the url once a new haste is created.
+	Key string	`json:"key"`
 
 	// Data is the contents of the haste.
-	Data string
+	Data string `json:"data"`
 }
 
-// Post posts a hastebin document and returns the key to that haste,
+// Post posts a hastebin document and returns the key to that haste.
 // The haste key returned will contain exactly what you put in as
 // the contents.
-func (h *Hastebin) Post() string {
+func (h *Hastebin) Post() (string, error) {
 	// Creates a json body.
 	rbody := []byte(h.Data)
 
 	// Create a new post request and creates a new bytebuffer
 	// with our given Data.
 	post, err := http.Post(base, "application/json", bytes.NewBuffer(rbody))
-
 	if err != nil {
-		// Something went wrong, panic.
-		panic(err)
+		return "", err
+
+	}
+	// Time to decode our body to defer the key.
+	hb := Hastebin{}
+	if err := json.NewDecoder(post.Body).Decode(&hb); err != nil {
+		return "", err
 	}
 
-	// Read our request body
-	body, err := ioutil.ReadAll(post.Body)
-
-	// Return the request body casted string.
-	return string(body)
+	// Return our key.
+	return hb.Key, nil
 }
