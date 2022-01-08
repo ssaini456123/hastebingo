@@ -18,18 +18,18 @@ type Hastebin struct {
 	//
 	// This unique key is usually found at the end of
 	// the url once a new haste is created.
-	Key string	`json:"key"`
-
-	// Data is the contents of the haste.
-	Data string `json:"data"`
+	Key string `json:"key"`
 }
 
 // Post posts a hastebin document and returns the key to that haste.
 // The haste key returned will contain exactly what you put in as
 // the contents.
-func (h *Hastebin) Post() (string, error) {
+//
+// The contents of this haste in our case is the `data` parameter
+//
+func (h *Hastebin) Post(data string) (string, error) {
 	// Creates a json body.
-	rbody := []byte(h.Data)
+	rbody := []byte(data)
 
 	// Create a new post request and creates a new bytebuffer
 	// with our given Data.
