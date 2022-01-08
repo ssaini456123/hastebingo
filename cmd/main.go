@@ -8,5 +8,10 @@ import (
 
 func main() {
 	h := hastebingo.Hastebin{}
-	fmt.Println(h.Post("HI EVERYONE!"))
+	h.Post("HI EVERYONE")
+	key := h.RetrieveKey()
+
+	fmt.Println(key)
+
+	fmt.Println(h.Read(key)) // read from key
 }

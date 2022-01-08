@@ -3,6 +3,8 @@ package hastebingo
 import (
 	"bytes"
 	"encoding/json"
+	"io/ioutil"
+	"log"
 	"net/http"
 )
 
@@ -19,14 +21,16 @@ type Hastebin struct {
 	// This unique key is usually found at the end of
 	// the url once a new haste is created.
 	Key string `json:"key"`
+
+	Data string `json: "data"`
 }
 
-// Post posts a hastebin document and returns the key to that haste.
-// The haste key returned will contain exactly what you put in as
-// the contents.
-//
+var key string
+
+// Post posts a hastebin document to the hastebin server
 // The contents of this haste in our case is the `data` parameter
 //
+// To retrieve the key of the created haste, see the RetrieveKey() method.
 func (h *Hastebin) Post(data string) (string, error) {
 	// Creates a json body.
 	rbody := []byte(data)
@@ -44,6 +48,46 @@ func (h *Hastebin) Post(data string) (string, error) {
 		return "", err
 	}
 
-	// Return our key.
-	return hb.Key, nil
+	key = hb.Key
+
+	return "", err
+}
+
+// Reads the contents of a hastebin haste.
+// Takes in the key to the document and returns the raw string of the haste.
+//
+// To find the key to the haste you created, see RetrieveKey()
+func (h *Hastebin) Read(key string) (string, error) {
+	url := base + "/"
+	resp, err := http.Get(url + key)
+
+	if err != nil {
+		log.Fatalln(err)
+		return "", err
+	}
+
+	body, err := ioutil.ReadAll(resp.Body)
+
+	if err != nil {
+		log.Fatalln(err)
+		return "", err
+	}
+
+	haste := Hastebin{}
+
+	jsonError := json.Unmarshal(body, &haste)
+
+	if jsonError != nil {
+		log.Fatalln(err)
+		return "", err
+	}
+
+	return haste.Data, err
+}
+
+// RetrieveKey returns the key of the haste created from Post().
+// This key can be used to access a hastebin document or read from a hastebin
+// document using the Read() method.
+func (h *Hastebin) RetrieveKey() string {
+	return key
 }
