@@ -22,6 +22,7 @@ type Hastebin struct {
 	// the url once a new haste is created.
 	Key string `json:"key"`
 
+	// Data is what will hold your hastebin data.
 	Data string `json: "data"`
 }
 
