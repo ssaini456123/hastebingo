@@ -11,11 +11,9 @@ import (
 
 var base = "https://hastebin.com/documents"
 
-// Hastebin holds the basic structure of
-// hastebin hastes
-//
-// Please note however that this is based on my observations
-// from the element inspector in my browser.
+// Hastebin holds the basic structure of hastebin hastes.
+// These fields were based on my observations of the API using a network inspector.
+// If ANY of these fields turn invalid, make sure to submit a pull request.
 type Hastebin struct {
 	// Key is the unique key generated for each haste.
 	//
