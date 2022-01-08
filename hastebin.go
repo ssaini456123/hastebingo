@@ -6,6 +6,7 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"os"
 )
 
 var base = "https://hastebin.com/documents"
@@ -23,7 +24,7 @@ type Hastebin struct {
 	Key string `json:"key"`
 
 	// Data is what will hold your hastebin data.
-	Data string `json: "data"`
+	Data string `json:"data"`
 }
 
 var key string
@@ -32,7 +33,9 @@ var key string
 // The contents of this haste in our case is the `data` parameter
 //
 // To retrieve the key of the created haste, see the RetrieveKey() method.
-func (h *Hastebin) Post(data string) (string, error) {
+//
+// Returns an error upon failure.
+func (h *Hastebin) Post(data string) error {
 	// Creates a json body.
 	rbody := []byte(data)
 
@@ -40,18 +43,18 @@ func (h *Hastebin) Post(data string) (string, error) {
 	// with our given Data.
 	post, err := http.Post(base, "application/json", bytes.NewBuffer(rbody))
 	if err != nil {
-		return "", err
+		return err
 
 	}
 	// Time to decode our body to defer the key.
 	hb := Hastebin{}
 	if err := json.NewDecoder(post.Body).Decode(&hb); err != nil {
-		return "", err
+		return err
 	}
 
 	key = hb.Key
 
-	return "", err
+	return err
 }
 
 // Reads the contents of a hastebin haste.
@@ -84,6 +87,29 @@ func (h *Hastebin) Read(key string) (string, error) {
 	}
 
 	return haste.Data, err
+}
+
+// PasteFile reads a file (given a file name) and
+// pastes those very contents read from that file to a haste.
+//
+// Returns an error upon failure.
+func (h *Hastebin) PasteFile(filename string) error {
+	file, err := os.Open(filename)
+
+	if err != nil {
+		return err
+	}
+	defer file.Close()
+
+	buffer := new(bytes.Buffer)
+
+	buffer.ReadFrom(file)
+
+	contents := buffer.String()
+
+	h.Post(contents)
+
+	return err
 }
 
 // RetrieveKey returns the key of the haste created from Post().
