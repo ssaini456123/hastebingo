@@ -110,9 +110,9 @@ func (h *Hastebin) PasteFile(filename string) error {
 	return err
 }
 
-// RetrieveKey returns the key of the haste created from Post().
+// GetKey returns the key of the haste created from Post().
 // This key can be used to access a hastebin document or read from a hastebin
 // document using the Read() method.
-func (h *Hastebin) RetrieveKey() string {
+func (h *Hastebin) GetKey() string {
 	return key
 }

@@ -9,9 +9,15 @@ import (
 func main() {
 	h := hastebingo.Hastebin{}
 	h.Post("HI EVERYONE")
-	key := h.RetrieveKey()
+	key := h.GetKey()
 
-	fmt.Println(key)
+	fmt.Println("The key: " + key)
 
-	fmt.Println(h.Read(key)) // read from key
+	result, err := h.Read(key) // read from key
+
+	if err != nil {
+		panic(err)
+	}
+
+	fmt.Println(result) 
 }

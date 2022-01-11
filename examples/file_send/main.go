@@ -9,9 +9,14 @@ import (
 func main() {
 	h := hastebingo.Hastebin{}
 	h.PasteFile("to_be_sent.txt")
-	key := h.RetrieveKey()
+	key := h.GetKey()
 
-	fmt.Println(key)
+	fmt.Println("The key: " + key)
+	result, err := h.Read(key) // read from key.
 
-	fmt.Println(h.Read(key)) // read from key
+	if err != nil {
+		panic(err)
+	}
+
+	fmt.Println(result)
 }
