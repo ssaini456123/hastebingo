@@ -31,7 +31,6 @@ var key string
 // The contents of this haste in our case is the `data` parameter
 //
 // To retrieve the key of the created haste, see the RetrieveKey() method.
-//
 // Returns an error upon failure.
 func (h *Hastebin) Post(data string) error {
 	// Creates a json body.
@@ -57,7 +56,6 @@ func (h *Hastebin) Post(data string) error {
 
 // Reads the contents of a hastebin haste.
 // Takes in the key to the document and returns the raw string of the haste.
-//
 // To find the key to the haste you created, see RetrieveKey()
 func (h *Hastebin) Read(key string) (string, error) {
 	url := base + "/"
@@ -89,7 +87,6 @@ func (h *Hastebin) Read(key string) (string, error) {
 
 // PasteFile reads a file (given a file name) and
 // pastes those very contents read from that file to a haste.
-//
 // Returns an error upon failure.
 func (h *Hastebin) PasteFile(filename string) error {
 	file, err := os.Open(filename)
