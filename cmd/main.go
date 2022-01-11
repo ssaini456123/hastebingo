@@ -11,7 +11,7 @@ import (
 func main() {
 	app := &cli.App{
 		Name:  "hastebingo",
-		Usage: `Create a hastebin document. Wrap your input in double quotes (\""\). `,
+		Usage: "Create a hastebin document. Wrap your input in double quotes (\"\"). ",
 		Action: func(c *cli.Context) error {
 			h := hastebingo.Hastebin{}
 			h.Post(c.Args().Get(0))
