@@ -43,6 +43,7 @@ func (h *Hastebin) Post(data string) error {
 		return err
 
 	}
+
 	// Time to decode our body to defer the key.
 	hb := Hastebin{}
 	if err := json.NewDecoder(post.Body).Decode(&hb); err != nil {
@@ -74,7 +75,6 @@ func (h *Hastebin) Read(key string) (string, error) {
 	}
 
 	haste := Hastebin{}
-
 	jsonError := json.Unmarshal(body, &haste)
 
 	if jsonError != nil {
@@ -97,11 +97,9 @@ func (h *Hastebin) PasteFile(filename string) error {
 	defer file.Close()
 
 	buffer := new(bytes.Buffer)
-
 	buffer.ReadFrom(file)
 
 	contents := buffer.String()
-
 	h.Post(contents)
 
 	return err

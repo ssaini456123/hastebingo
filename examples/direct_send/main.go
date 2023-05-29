@@ -19,5 +19,5 @@ func main() {
 		panic(err)
 	}
 
-	fmt.Println(result) 
+	fmt.Println(result)
 }
